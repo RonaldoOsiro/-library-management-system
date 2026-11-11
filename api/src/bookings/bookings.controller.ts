@@ -22,11 +22,6 @@ interface AuthenticatedRequest extends Request {
 export class BookingsController {
   constructor(private readonly bookingsService: BookingsService) {}
 
-  @Get('spaces')
-  findSpaces() {
-    return this.bookingsService.findSpaces();
-  }
-
   @Post()
   @UseGuards(JwtAuthGuard)
   create(

@@ -12,13 +12,6 @@ import { CreateBookingDto } from './dto/create-booking.dto';
 export class BookingsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findSpaces() {
-    return this.prisma.space.findMany({
-      where: { isActive: true },
-      orderBy: { name: 'asc' },
-    });
-  }
-
   async create(userId: number, data: CreateBookingDto) {
     const startAt = new Date(data.startAt);
     const endAt = new Date(data.endAt);

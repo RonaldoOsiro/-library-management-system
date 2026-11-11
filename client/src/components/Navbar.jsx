@@ -5,11 +5,18 @@ import { useReadingList } from '../context/ReadingListContext.jsx';
 export default function Navbar() {
   const { items } = useReadingList();
   const token = localStorage.getItem('token') || localStorage.getItem('library_jwt');
+  let user;
+  try {
+    user = JSON.parse(localStorage.getItem('library_user') || localStorage.getItem('user') || 'null');
+  } catch {
+    user = null;
+  }
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('library_jwt');
     localStorage.removeItem('library_user');
+    localStorage.removeItem('user');
     window.location.assign('/');
   };
 
@@ -24,11 +31,19 @@ export default function Navbar() {
         <NavLink className="header-link" to="/">Browse</NavLink>
         <NavLink className="header-link" to="/space-booking">Bookings</NavLink>
 
-        <Link className="header-reading-list" to="/" aria-label="Reading list with count">
+        <Link className="header-reading-list" to="/reading-list" aria-label="Reading list with count">
           <ListOrdered size={15} />
           <span>Reading list</span>
           <span className="reading-count">{items.length}</span>
         </Link>
+
+        {user?.role === 'LIBRARIAN' && (
+          <>
+            <Link className="header-action" to="/admin/books">Admin books</Link>
+            <Link className="header-action" to="/admin/borrow-requests">Borrow requests</Link>
+            <Link className="header-action" to="/admin/bookings">Bookings admin</Link>
+          </>
+        )}
 
         {token ? (
           <button type="button" className="header-action" onClick={handleLogout}>

@@ -2,13 +2,16 @@ import { ArrowLeft, BookOpen, CalendarDays, Copy, Hash } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import BookCover from '../components/BookCover.jsx';
+import { useReadingList } from '../context/ReadingListContext.jsx';
 import { fetchApi } from '../lib/api.js';
 
 export default function BookDetail() {
   const { id } = useParams();
+  const { items, addBook, removeBook } = useReadingList();
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const isSaved = items.some((item) => String(item.id) === String(id));
 
   useEffect(() => {
     const controller = new AbortController();
@@ -51,6 +54,13 @@ export default function BookDetail() {
               <div><dt><BookOpen size={16} /> Collection</dt><dd>{book.totalCopies} {book.totalCopies === 1 ? 'copy' : 'copies'}</dd></div>
               <div><dt><Copy size={16} /> Genre</dt><dd>{book.genre?.name || 'Uncategorized'}</dd></div>
             </dl>
+            <button
+              type="button"
+              className="primary-button detail-save-button"
+              onClick={() => (isSaved ? removeBook(id) : addBook(book))}
+            >
+              {isSaved ? 'Remove from reading list' : 'Add to reading list'}
+            </button>
             <Link to="/" className="detail-browse-link">Explore more books <ArrowLeft size={16} /></Link>
           </div>
         </article>

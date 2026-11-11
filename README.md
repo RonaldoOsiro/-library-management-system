@@ -18,13 +18,15 @@ The seed clears existing reviews, books, genres, and users before loading sample
 
 The API includes authenticated `POST /borrow-requests` (send `bookIds` from the patron's reading list and an optional ISO `dueDate`), plus librarian-only `GET /borrow-requests` and `PATCH /borrow-requests/:id` (send a `status`). Returning a request records the return time and calculates a fine at the configured service rate of $1 per overdue day.
 
-Authenticated patrons can `POST /bookings` with `spaceId`, `startAt`, and `endAt` ISO date-time values. Existing overlapping bookings for the same space are rejected. `GET /bookings/spaces` lists active spaces; librarian-only `GET /bookings` lists reservations.
+Authenticated patrons can `POST /bookings` with `spaceId`, `startAt`, and `endAt` ISO date-time values. Existing overlapping bookings for the same space are rejected. `GET /spaces?activeOnly=true` lists active spaces. Librarians can create, update, and deactivate spaces through the protected `/spaces` endpoints, and `GET /bookings` lists reservations.
 
-The initial Prisma migration is in `api/prisma/migrations/`. Apply it to a running PostgreSQL database from `api/` with `npx prisma migrate dev`, then regenerate the client with `npx prisma generate`. Run the fine-calculator unit tests with `npm test`.
+The initial Prisma migration is in `api/prisma/migrations/`. Apply it to a running PostgreSQL database from `api/` with `npx prisma migrate dev`, then regenerate the client with `npx prisma generate`. Run fine-calculator tests with `npm test`, and the catalog HTTP e2e test with `npm run test:e2e`.
 
 ## Running the Client
 
 The React/Vite client is in `client/`. Copy `client/.env.example` to `client/.env` and set `VITE_API_URL` to the running API URL (defaults to `http://localhost:3000`). Then run `npm install` and `npm run dev` from `client/`. Keep `.env` local; only the example configuration is committed.
+
+The client includes a patron reading list and booking form, plus librarian pages at `/admin/books`, `/admin/borrow-requests`, and `/admin/bookings`.
 
 ---
 

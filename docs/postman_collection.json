@@ -242,7 +242,7 @@
       "item": [
         {
           "name": "List available spaces",
-          "request": { "method": "GET", "url": "{{baseUrl}}/bookings/spaces" }
+          "request": { "method": "GET", "url": "{{baseUrl}}/spaces?activeOnly=true" }
         },
         {
           "name": "Create booking",

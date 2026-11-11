@@ -6,6 +6,7 @@ import { BorrowRequestsModule } from './borrow-requests/borrow-requests.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { GenresModule } from './genres/genres.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { SpacesModule } from './spaces/spaces.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
@@ -17,6 +18,7 @@ import { UsersModule } from './users/users.module';
     BooksModule,
     BorrowRequestsModule,
     BookingsModule,
+    SpacesModule,
     UsersModule,
   ],
 })
