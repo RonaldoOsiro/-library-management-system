@@ -4,6 +4,9 @@ import { hash } from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
+  await prisma.booking.deleteMany();
+  await prisma.borrowRequest.deleteMany();
+  await prisma.space.deleteMany();
   await prisma.review.deleteMany();
   await prisma.book.deleteMany();
   await prisma.genre.deleteMany();
@@ -36,6 +39,14 @@ async function main() {
   const sciFi = await prisma.genre.create({ data: { name: 'Science Fiction' } });
   const mystery = await prisma.genre.create({ data: { name: 'Mystery' } });
   const nonFiction = await prisma.genre.create({ data: { name: 'Non-Fiction' } });
+  await prisma.space.createMany({
+    data: [
+      { name: 'Focus Booth', capacity: 1 },
+      { name: 'Study Room', capacity: 6 },
+      { name: 'Community Table', capacity: 8 },
+      { name: 'Presentation Room', capacity: 12 },
+    ],
+  });
 
   const booksData = [
     { title: 'The Hobbit', author: 'J.R.R. Tolkien', isbn: '978-0547928227', publishedYear: 1937, totalCopies: 4, genreId: fantasy.id },

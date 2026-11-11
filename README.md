@@ -9,10 +9,18 @@ The NestJS API is in `api/`. From that directory:
 
 1. Copy `.env.example` to `.env` and set `DATABASE_URL` to your PostgreSQL connection string and `JWT_SECRET` to a long, unique secret. Set `SEED_USER_PASSWORD` to a private password of at least 12 characters. Never commit `.env`.
 2. Install dependencies with `npm install`.
-3. Generate the Prisma client and create the database tables with `npm run prisma:generate` and `npm run prisma:migrate -- --name init`.
+3. Apply the committed database migration and generate the Prisma client with `npm run prisma:migrate` and `npm run prisma:generate`.
 4. Optionally populate the example catalog with `npm run prisma:seed`, then run the server with `npm run start:dev`.
 
 The seed clears existing reviews, books, genres, and users before loading sample data; only run it against a disposable development database. It creates a librarian at `librarian@library.com` and a patron at `patron@library.com`; both use the private `SEED_USER_PASSWORD` value. Set that password as the `seedUserPassword` collection variable in Postman to test seeded login. Public registration always creates a patron. Book create, update, and delete require a librarian JWT. The Postman collection at `docs/postman_collection.json` includes every API endpoint.
+
+## Borrow Requests and Space Bookings
+
+The API includes authenticated `POST /borrow-requests` (send `bookIds` from the patron's reading list and an optional ISO `dueDate`), plus librarian-only `GET /borrow-requests` and `PATCH /borrow-requests/:id` (send a `status`). Returning a request records the return time and calculates a fine at the configured service rate of $1 per overdue day.
+
+Authenticated patrons can `POST /bookings` with `spaceId`, `startAt`, and `endAt` ISO date-time values. Existing overlapping bookings for the same space are rejected. `GET /bookings/spaces` lists active spaces; librarian-only `GET /bookings` lists reservations.
+
+The initial Prisma migration is in `api/prisma/migrations/`. Apply it to a running PostgreSQL database from `api/` with `npx prisma migrate dev`, then regenerate the client with `npx prisma generate`. Run the fine-calculator unit tests with `npm test`.
 
 ## Running the Client
 

@@ -2,13 +2,15 @@
   "info": {
     "_postman_id": "f70e51e5-5c45-4dfb-9d7c-c0e34933c7a2",
     "name": "Library Management API",
-    "description": "Requests for all implemented authentication, user, genre, and book endpoints. Authenticate the librarian request group by setting librarianToken after logging in.",
+    "description": "Requests for the authentication, catalog, borrowing, and booking endpoints. Authenticate librarian requests by setting librarianToken after logging in.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
     { "key": "baseUrl", "value": "http://localhost:3000" },
     { "key": "genreId", "value": "1" },
     { "key": "bookId", "value": "1" },
+    { "key": "spaceId", "value": "1" },
+    { "key": "borrowRequestId", "value": "1" },
     { "key": "librarianToken", "value": "" },
     { "key": "userToken", "value": "" },
     { "key": "seedUserPassword", "value": "" }
@@ -186,6 +188,87 @@
               "bearer": [{ "key": "token", "value": "{{librarianToken}}", "type": "string" }]
             },
             "url": "{{baseUrl}}/books/{{bookId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Borrow requests",
+      "item": [
+        {
+          "name": "Create requests from reading list",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{userToken}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookIds\": [{{bookId}}]\n}"
+            },
+            "url": "{{baseUrl}}/borrow-requests"
+          }
+        },
+        {
+          "name": "List requests (Librarian)",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{librarianToken}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/borrow-requests"
+          }
+        },
+        {
+          "name": "Update request status (Librarian)",
+          "request": {
+            "method": "PATCH",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{librarianToken}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"RETURNED\"\n}" },
+            "url": "{{baseUrl}}/borrow-requests/{{borrowRequestId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "List available spaces",
+          "request": { "method": "GET", "url": "{{baseUrl}}/bookings/spaces" }
+        },
+        {
+          "name": "Create booking",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{userToken}}", "type": "string" }]
+            },
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"spaceId\": {{spaceId}},\n  \"startAt\": \"2026-12-01T10:00:00.000Z\",\n  \"endAt\": \"2026-12-01T11:00:00.000Z\"\n}"
+            },
+            "url": "{{baseUrl}}/bookings"
+          }
+        },
+        {
+          "name": "List bookings (Librarian)",
+          "request": {
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [{ "key": "token", "value": "{{librarianToken}}", "type": "string" }]
+            },
+            "url": "{{baseUrl}}/bookings"
           }
         }
       ]
