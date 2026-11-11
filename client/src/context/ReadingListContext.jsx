@@ -33,7 +33,7 @@ function normalizeBook(book) {
   };
 }
 
-function readingListReducer(state, action) {
+export function readingListReducer(state, action) {
   switch (action.type) {
     case 'ADD_BOOK': {
       const book = normalizeBook(action.payload);
