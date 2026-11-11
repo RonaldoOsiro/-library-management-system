@@ -14,6 +14,10 @@ The NestJS API is in `api/`. From that directory:
 
 The seed clears existing reviews, books, genres, and users before loading sample data; only run it against a disposable development database. It creates a librarian at `librarian@library.com` and a patron at `patron@library.com`; both use the private `SEED_USER_PASSWORD` value. Set that password as the `seedUserPassword` collection variable in Postman to test seeded login. Public registration always creates a patron. Book create, update, and delete require a librarian JWT. The Postman collection at `docs/postman_collection.json` includes every API endpoint.
 
+## Running the Client
+
+The React/Vite client is in `client/`. Copy `client/.env.example` to `client/.env` and set `VITE_API_URL` to the running API URL (defaults to `http://localhost:3000`). Then run `npm install` and `npm run dev` from `client/`. Keep `.env` local; only the example configuration is committed.
+
 ---
 
 ## Schema Decisions
