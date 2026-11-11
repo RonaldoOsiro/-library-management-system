@@ -1,28 +1,39 @@
-import { ArrowUpRight, LibraryBig } from 'lucide-react';
-import { Link, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
+import { ReadingListProvider } from './context/ReadingListContext.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import RegisterPage from './pages/RegisterPage.jsx';
+import SpaceBookingPage from './pages/SpaceBookingPage.jsx';
 import BookDetail from './pages/BookDetail.jsx';
 import HomePage from './pages/HomePage.jsx';
 
 export default function App() {
   return (
-    <div className="app-shell">
-      <header className="site-header">
-        <Link className="wordmark" to="/" aria-label="Fieldnotes Library home">
-          <span className="wordmark-icon"><LibraryBig size={19} strokeWidth={1.8} /></span>
-          <span>fieldnotes<span className="wordmark-light"> / library</span></span>
-        </Link>
-        <a className="header-link" href="https://github.com" target="_blank" rel="noreferrer">
-          A place for curious minds <ArrowUpRight size={15} />
-        </a>
-      </header>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/books/:id" element={<BookDetail />} />
-      </Routes>
-      <footer className="site-footer">
-        <span>Fieldnotes Library</span>
-        <span>Stories worth keeping close.</span>
-      </footer>
-    </div>
+    <ReadingListProvider>
+      <div className="app-shell">
+        <Navbar />
+
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/books/:id" element={<BookDetail />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route
+            path="/space-booking"
+            element={(
+              <ProtectedRoute>
+                <SpaceBookingPage />
+              </ProtectedRoute>
+            )}
+          />
+        </Routes>
+
+        <footer className="site-footer">
+          <span>Fieldnotes Library</span>
+          <span>Stories worth keeping close.</span>
+        </footer>
+      </div>
+    </ReadingListProvider>
   );
 }
